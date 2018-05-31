@@ -83,7 +83,7 @@
           render(res.data)
           setTimeout(() => {
             this.init()
-          }, 10000)
+          }, 30 * 1000)
         })
       }
     }
@@ -320,7 +320,6 @@
         let cityValueAfterAvg = cityItem[2]
         let xy = geoCoordMap[cityName]
         if (!xy) {
-          console.log(cityName)
           continue
         }
         let colorIndex = Math.floor(i / float2(cityCount / colors.length, 0))
@@ -337,7 +336,6 @@
     var allData = {
       citys: mapConver(mapDataArr)
     }
-    console.log(allData.citys)
 
     var option = {
       backgroundColor: '#404a59',

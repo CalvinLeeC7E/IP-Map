@@ -5,11 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="renderer" content="webkit">
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
-  <title>实时分布</title>
+  <title>实时在线</title>
+  <link href="https://cdn.bootcss.com/element-ui/2.4.0/theme-chalk/index.css" rel="stylesheet">
   <script src="https://cdn.bootcss.com/echarts/3.8.5/echarts.min.js"></script>
   <script src="http://gallery.echartsjs.com/dep/echarts/map/js/china.js"></script>
   <script src="https://cdn.bootcss.com/axios/0.18.0/axios.min.js"></script>
   <script src="https://cdn.bootcss.com/vue/2.5.16/vue.min.js"></script>
+  <script src="https://cdn.bootcss.com/element-ui/2.4.0/index.js"></script>
   <style>
     * {
       margin: 0;
@@ -20,50 +22,117 @@
       height: 100%;
     }
     
-    #chart-panel {
+    .main-view {
       position: absolute;
       left: 0;
       right: 0;
       top: 0;
       bottom: 0;
-      padding: 10px 10px 20px 10px;
+      padding: 20px;
+      background: #404a59;
+      -webkit-tap-highlight-color: transparent;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
     }
     
-    .cover-view {
-      z-index: 10;
+    #chart-panel {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 20px;
+      bottom: 0;
     }
     
     .total {
-      position: absolute;
-      left: 100px;
-      top: 100px;
       color: white;
-      font-size: 30px;
+      font-size: 20px;
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-orient: horizontal;
+      -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+      flex-direction: row;
+    }
+    
+    .total .total--title {
+      -webkit-box-flex: 1;
+      -ms-flex: 1;
+      flex: 1;
     }
     
     .top10 {
-      position: absolute;
-      left: 100px;
-      top: 150px;
+      margin-top: 20px;
       color: white;
+      font-size: 16px;
+    }
+    
+    .top10 .top10--title {
+      padding: 10px 0;
       font-size: 20px;
+    }
+    
+    .top10--item {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-orient: horizontal;
+      -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+      flex-direction: row;
+    }
+    
+    .top10--item .top10-item-title {
+      -webkit-box-flex: 1;
+      -ms-flex: 1;
+      flex: 1;
     }
   </style>
 </head>
 <body>
-<div id="app">
-  <div class="cover-view total">{{total}}</div>
-  <div class="cover-view top10">
-    <div v-for="item in top10">
-      {{item[0]}} - {{item[1]}}
-    </div>
-  </div>
-  <div id="chart-panel"
-       style="-webkit-tap-highlight-color: transparent; user-select: none; background: rgb(64, 74, 89);">
-  </div>
+<div id="app" class="main-view">
+  <div id="chart-panel"></div>
+  <el-row style="z-index: 10">
+    <el-col :span="4">
+      <div class="total">
+        <div class="total--title">当前在线:</div>
+        <div>{{total | stdNumber}}</div>
+      </div>
+      <div class="top10">
+        <div class="top10--title">Top 10：</div>
+        <div class="top10--item" v-for="item in top10">
+          <div class="top10-item-title">{{item[0]}}</div>
+          <div>{{item[1] | stdNumber}}</div>
+        </div>
+      </div>
+    </el-col>
+    <el-col :span="16"></el-col>
+    <el-col :span="4"></el-col>
+  </el-row>
 </div>
 </body>
 <script>
+
+  Vue.filter('stdNumber', function (val) {
+    function chunk (arr, size) {
+      let res = []
+      for (let i = 0; i < arr.length; i += size) {
+        res.push(arr.slice(i, i + size))
+      }
+      return res
+    }
+
+    if (Number.isNaN(val)) return ''
+    const size = 3
+    var res = ['', '']
+    val = val.toString()
+    let vals = val.split('.')
+    res[0] = chunk(vals[0].split('').reverse(), size).map(item => item.reverse()).map(item => item.join('')).reverse().join(',')
+    if (vals[1]) res[1] = vals[1].padEnd(2, '0')
+    return res.join('')
+  })
 
   var vm = new Vue({
     el: '#app',
@@ -73,13 +142,16 @@
     },
     mounted () {
       this.init()
+      // setTimeout(() => {
+      //   render({})
+      // }, 500)
     },
     methods: {
       showTotal (val) {
-        this.total = `当前在线：${val}`
+        this.total = val
       },
       init () {
-        axios.get('/mapData').then(res => {
+        axios.get('http://ipmap.fe.i200.cn/mapData').then(res => {
           render(res.data)
           setTimeout(() => {
             this.init()
@@ -284,6 +356,10 @@
 
   var myChart = echarts.init(document.getElementById('chart-panel'))
 
+  window.onresize = function () {
+    myChart.resize()
+  }
+
   function render (myData) {
 
     function float2 (val, fixed = 2) {
@@ -363,7 +439,7 @@
             show: false
           }
         },
-        roam: true,
+        roam: false,
         itemStyle: {
           normal: {
             areaColor: '#323c48',

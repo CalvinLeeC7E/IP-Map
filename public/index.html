@@ -154,21 +154,21 @@
       total: '',
       top10: []
     },
-    mounted () {
+    mounted: function () {
       this.loadGeoMapData().then(() => {
         this.init()
       })
     },
     methods: {
-      showTotal (val) {
+      showTotal: function (val) {
         this.total = val
       },
-      loadGeoMapData () {
+      loadGeoMapData: function () {
         return axios.get('http://cloud.fe.i200.cn/cloud/5a8f75b1854bfb7912357db4/calvin/echarts/map/chinaCity').then(res => {
           geoCoordMap = res.data
         })
       },
-      init () {
+      init: function () {
         axios.get('http://ipmap.fe.i200.cn/mapData').then(res => {
           render(res.data)
           setTimeout(() => {

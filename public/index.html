@@ -191,7 +191,8 @@
 
   function render (myData) {
 
-    function float2 (val, fixed = 2) {
+    function float2 (val, fixed) {
+      if (!fixed) fixed = 2
       return Number(Number(val).toFixed(fixed))
     }
 

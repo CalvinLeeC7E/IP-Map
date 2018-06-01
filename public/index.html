@@ -90,11 +90,23 @@
       -ms-flex: 1;
       flex: 1;
     }
+    
+    .data-info {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      -webkit-transform: scale(0.6);
+      color: white;
+    }
   </style>
 </head>
 <body>
 <div id="app" class="main-view">
   <div id="chart-panel"></div>
+  <p class="data-info">
+    关于数据<br>
+    地图所有点均为真实数据，地理信息由IP推出
+  </p>
   <el-row style="z-index: 10">
     <el-col :span="4">
       <div class="total">

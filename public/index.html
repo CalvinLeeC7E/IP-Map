@@ -143,7 +143,11 @@
     var res = ['', '']
     val = val.toString()
     let vals = val.split('.')
-    res[0] = chunk(vals[0].split('').reverse(), size).map(item => item.reverse()).map(item => item.join('')).reverse().join(',')
+    res[0] = chunk(vals[0].split('').reverse(), size).map(function (item) {
+      return item.reverse()
+    }).map(function (item) {
+      return item.join('')
+    }).reverse().join(',')
     if (vals[1]) res[1] = vals[1].padEnd(2, '0')
     return res.join('')
   })
@@ -155,25 +159,25 @@
       top10: []
     },
     mounted: function () {
-      this.loadGeoMapData().then(() => {
+      this.loadGeoMapData().then(function () {
         this.init()
-      })
+      }.bind(this))
     },
     methods: {
       showTotal: function (val) {
         this.total = val
       },
       loadGeoMapData: function () {
-        return axios.get('http://cloud.fe.i200.cn/cloud/5a8f75b1854bfb7912357db4/calvin/echarts/map/chinaCity').then(res => {
+        return axios.get('http://cloud.fe.i200.cn/cloud/5a8f75b1854bfb7912357db4/calvin/echarts/map/chinaCity').then(function (res) {
           geoCoordMap = res.data
         })
       },
       init: function () {
         axios.get('http://ipmap.fe.i200.cn/mapData').then(res => {
           render(res.data)
-          setTimeout(() => {
+          setTimeout(function () {
             this.init()
-          }, 30 * 1000)
+          }.bind(this), 30 * 1000)
         })
       }
     }
@@ -192,14 +196,16 @@
     }
 
     function converMyData () {
-      let ips = Object.keys(myData).map(key => {
+      let ips = Object.keys(myData).map(function (key) {
         return [key, myData[key]]
       })
       ips.sort(function (a, b) {
         return b[1] - a[1]
       })
       vm.top10 = ips.slice(0, 10)
-      let sum = ips.reduce((res, item) => res += item[1], 0)
+      let sum = ips.reduce(function (res, item) {
+        return res += item[1]
+      }, 0)
       vm.showTotal(sum)
       let avg = float2(sum / ips.length)
 

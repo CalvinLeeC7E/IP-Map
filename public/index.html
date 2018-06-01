@@ -173,7 +173,7 @@
         })
       },
       init: function () {
-        axios.get('http://ipmap.fe.i200.cn/mapData').then(res => {
+        axios.get('http://ipmap.fe.i200.cn/mapData').then(function (res) {
           render(res.data)
           setTimeout(function () {
             this.init()

@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="main-view">
+  <div class="main-view">
     <div id="chart-panel"></div>
     <p class="data-info">
       关于数据<br>
@@ -233,16 +233,6 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  * {
-    margin: 0;
-    padding: 0;
-  }
-  
-  html, body {
-    height: 100%;
-    -webkit-font-smoothing: antialiased;
-  }
-  
   .main-view {
     position: absolute;
     left: 0;
@@ -252,9 +242,6 @@
     padding: 20px;
     background: #404a59;
     -webkit-tap-highlight-color: transparent;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
     user-select: none;
   }
   
@@ -269,18 +256,11 @@
   .total {
     color: white;
     font-size: 20px;
-    display: -webkit-box;
-    display: -ms-flexbox;
     display: flex;
-    -webkit-box-orient: horizontal;
-    -webkit-box-direction: normal;
-    -ms-flex-direction: row;
     flex-direction: row;
   }
   
   .total .total--title {
-    -webkit-box-flex: 1;
-    -ms-flex: 1;
     flex: 1;
   }
   
@@ -296,18 +276,11 @@
   }
   
   .top10--item {
-    display: -webkit-box;
-    display: -ms-flexbox;
     display: flex;
-    -webkit-box-orient: horizontal;
-    -webkit-box-direction: normal;
-    -ms-flex-direction: row;
     flex-direction: row;
   }
   
   .top10--item .top10-item-title {
-    -webkit-box-flex: 1;
-    -ms-flex: 1;
     flex: 1;
   }
   
@@ -315,7 +288,7 @@
     position: absolute;
     bottom: 0;
     right: 0;
-    -webkit-transform: scale(0.6);
+    transform: scale(0.6);
     color: white;
   }
 </style>
